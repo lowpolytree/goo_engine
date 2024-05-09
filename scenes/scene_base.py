@@ -14,7 +14,7 @@ class Scene:
         for system in self.systems:
             system.update(self.entities, dt)
         self.clean_up()
-        print(f"Active Entities: {len(self.entities)}")
+        #print(f"Active Entities: {len(self.entities)}")
 
     def clean_up(self):
         self.entities = [entity for entity in self.entities if entity.is_active]

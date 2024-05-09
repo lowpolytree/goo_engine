@@ -28,6 +28,19 @@ class PhysicsSystem(System):
                 if shape:
                     shape.update_position(velocity.vx * dt, velocity.vy * dt)
 
+class GravitySystem(System):
+    def __init__(self, gravity = -9.8):
+        self.gravity = gravity
+
+    def update(self, entities, dt):
+        if not entities:  # Early exit if no entities to process
+            return
+        for entity in entities:
+            accel = entity.get_component(AccelerationComponent)
+            if accel:
+                accel.apply_force(0, self.gravity)
+
+
 class AgeSystem(System):
     def update(self, entities, dt):
         if not entities:  # Early exit if no entities to process

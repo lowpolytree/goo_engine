@@ -58,6 +58,7 @@ class AccelerationComponent(Component):
         """ Update acceleration based on the current total force and inverse mass. """
         self.ax = self.force_x * self.inverse_mass
         self.ay = self.force_y * self.inverse_mass
+        print(f"ax: {self.ax}, ay: {self.ay}")
 
     def clear_forces(self):
         """ Clear all forces after updating acceleration to prepare for the next frame. """
