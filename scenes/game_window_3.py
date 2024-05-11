@@ -10,7 +10,14 @@ from systems.systems import *
 
 class GameWindow3(pyglet.window.Window):
     def __init__(self):
-        super().__init__(800, 600)
+        super().__init__(1280, 720)
+
+        self.fps_display = pyglet.window.FPSDisplay(self)
+        # # Create a label to display the FPS
+        # self.fps_label = pyglet.text.Label("FPS: 0.00", x=10, y=10)
+        # # Schedule the update_fps function to be called every second
+        # pyglet.clock.schedule_interval(self.update_fps, 1.0, self.fps_label)
+
         self.batch = pyglet.graphics.Batch()  # Create a batch for drawing
         self.scene = Scene()  # Initialize the scene
         self.setup_scene()
@@ -27,10 +34,15 @@ class GameWindow3(pyglet.window.Window):
             self.change_particle_color(entity)
 
         self.clear()
+        #self.fps_label.draw()
+        self.fps_display.draw()
         self.batch.draw()  # Draw everything in the batch
 
     def update(self, dt):
         self.scene.update(dt)
+
+    # def update_fps(self, dt, label):
+    #     label.text = "FPS: {:.2f}".format(pyglet.clock.get_fps())
 
     def on_mouse_press(self, x, y, button, modifiers):
         if button == pyglet.window.mouse.LEFT:
@@ -39,7 +51,7 @@ class GameWindow3(pyglet.window.Window):
     def create_fireworks(self, x, y, number_of_particles, batch):
         for i in range(number_of_particles):
             # Stagger the creation by adding a small delay for each particle
-            delay = i * 0.01  # Delay each particle by 0.01 seconds
+            delay = i * 0.005  # Delay each particle by 0.01 seconds
             pyglet.clock.schedule_once(self.create_particle, delay, x, y, batch)
 
     def create_particle(self, dt, x, y, batch):
