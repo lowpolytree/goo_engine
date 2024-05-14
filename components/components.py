@@ -40,6 +40,11 @@ class VelocityComponent(Component):
         self.vy = vy
         self.damping = damping  # Damping factor
 
+class MassComponent(Component):
+    def __init__(self, mass=1.0):
+        self.mass = mass
+        self.inverse_mass = 1.0/self.mass if mass != 0 else float('inf')
+
 class AccelerationComponent(Component):
     
     def __init__(self, ax=0, ay=0):
@@ -69,3 +74,18 @@ class AgeComponent(Component):
     def __init__(self, age):
         self.age = age
         self.remaining_time = age
+
+class ForceComponent(Component):
+    def __init__(self):
+        self.forces = []
+
+    def add_force(self, fx, fy):
+        self.forces.append((fx, fy))
+
+    def total_force(self):
+        total_fx = sum(fx for fx, _ in self.forces)
+        total_fy = sum(fy for _, fy in self.forces)
+        return total_fx, total_fy
+    
+    def reset_forces(self):
+        self.forces = []

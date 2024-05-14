@@ -13,19 +13,20 @@ class GameWindow3(pyglet.window.Window):
         super().__init__(1280, 720)
 
         self.fps_display = pyglet.window.FPSDisplay(self)
-        # # Create a label to display the FPS
-        # self.fps_label = pyglet.text.Label("FPS: 0.00", x=10, y=10)
-        # # Schedule the update_fps function to be called every second
-        # pyglet.clock.schedule_interval(self.update_fps, 1.0, self.fps_label)
 
         self.batch = pyglet.graphics.Batch()  # Create a batch for drawing
         self.scene = Scene()  # Initialize the scene
         self.setup_scene()
 
     def setup_scene(self):
-        self.scene.add_system(PhysicsSystem())
+        physics_system = PhysicsSystem()
+        gravity_generator = GravityForceGenerator(-85.0)
+        drag_generator = DragForceGenerator(0.1)
+        physics_system.add_force_generator(gravity_generator)
+        physics_system.add_force_generator(drag_generator)
+
+        self.scene.add_system(physics_system)
         self.scene.add_system(AgeSystem())
-        self.scene.add_system(GravitySystem(-85.0))
 
     def on_draw(self):
 
@@ -34,15 +35,11 @@ class GameWindow3(pyglet.window.Window):
             self.change_particle_color(entity)
 
         self.clear()
-        #self.fps_label.draw()
         self.fps_display.draw()
         self.batch.draw()  # Draw everything in the batch
 
     def update(self, dt):
         self.scene.update(dt)
-
-    # def update_fps(self, dt, label):
-    #     label.text = "FPS: {:.2f}".format(pyglet.clock.get_fps())
 
     def on_mouse_press(self, x, y, button, modifiers):
         if button == pyglet.window.mouse.LEFT:
@@ -63,8 +60,9 @@ class GameWindow3(pyglet.window.Window):
         
         p = Entity()
         p.add_component(ShapeComponent.circle(x, y, random_radius, 1.0, batch))
+        p.add_component(ForceComponent())
+        p.add_component(MassComponent()) # mass = 1.0 by default
         p.add_component(VelocityComponent(random_speed * cos(random_angle), random_speed * sin(random_angle)))
-        p.add_component(AccelerationComponent())
         p.add_component(AgeComponent(random_age))
         self.scene.add_entity(p)
     
