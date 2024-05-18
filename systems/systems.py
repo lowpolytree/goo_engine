@@ -1,5 +1,5 @@
 from components.components import ShapeComponent, VelocityComponent, AccelerationComponent, AgeComponent, MassComponent, ForceComponent
-from systems.force_generator import GravityForceGenerator, DragForceGenerator
+from systems.force_generator import GravityForceGenerator, DragForceGenerator, SpringForceGenerator
 
 class System:
     def update(self, entities, dt):
@@ -33,11 +33,13 @@ class PhysicsSystem(System):
                 ax = total_fx * mass.inverse_mass
                 ay = total_fy * mass.inverse_mass
 
-                #print(f"ax: {ax}, ay: {ay}")
-
                 # Update velocity based on acceleration
                 velocity.vx += ax * dt
                 velocity.vy += ay * dt
+
+                # Apply damping to velocity
+                velocity.vx *= velocity.damping
+                velocity.vy *= velocity.damping
 
                 # Clear forces for the next update cycle
                 forces.reset_forces()

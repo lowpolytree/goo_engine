@@ -1,6 +1,5 @@
 import pyglet
-from pyglet.shapes import Circle
-from pyglet.shapes import Rectangle
+from pyglet.shapes import Circle, Rectangle, Line
 
 class Component:
     pass
@@ -11,21 +10,23 @@ class ShapeComponent(Component):
         self.shape = None
 
     @classmethod
-    def circle(cls, x, y, radius, mass=1.0, batch=None):
+    def line(cls, x1, y1, x2, y2, width, batch=None):
         obj = cls()
-        #position is at 0.0 by default, for rendering and physics position component will be used
+        obj.shape = Line(x1, y1, x2, y2, width, batch=batch)
+        return obj
+
+    @classmethod
+    def circle(cls, x, y, radius, batch=None):
+        obj = cls()
         obj.shape = Circle(x, y, radius, batch=batch)
-        obj.inverseMass = 1.0 / mass
         return obj
     
     @classmethod
-    def rectangle(cls, x, y, width, height, mass=1.0, batch=None):
+    def rectangle(cls, x, y, width, height, batch=None):
         obj = cls()
-        #position is at 0.0 by default, for rendering and physics position component will be used
         obj.shape = Rectangle(x, y, width, height, batch=batch) 
         obj.width = width
         obj.height = height
-        obj.inverseMass = 1.0 / mass
         return obj
 
     def update_position(self, dx, dy):
