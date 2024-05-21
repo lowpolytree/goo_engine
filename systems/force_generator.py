@@ -28,14 +28,15 @@ class DragForceGenerator(ForceGenerator):
             entity.get_component(ForceComponent).add_force(drag_fx, drag_fy)
         
 class SpringForceGenerator(ForceGenerator):
-    def __init__(self, anchor, spring_coefficient, rest_length):
-        self.k = spring_coefficient 
+    def __init__(self, spring, anchor, spring_coefficient, rest_length):
+        self.spring = spring
         self.anchor = anchor
+        self.k = spring_coefficient 
         self.rest_length = rest_length
-
+        
     def apply_force(self, entity):
-        force_comp = entity.get_component(ForceComponent)
-        shape = entity.get_component(ShapeComponent)
+        force_comp = self.spring.get_component(ForceComponent)
+        shape = self.spring.get_component(ShapeComponent)
         
         if shape and force_comp: 
             end_point = Vec2(shape.shape.x, shape.shape.y)

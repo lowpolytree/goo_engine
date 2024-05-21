@@ -44,9 +44,7 @@ class PhysicsSystem(System):
                 # Clear forces for the next update cycle
                 forces.reset_forces()
 
-                # Update position if shape component exists
-                if shape:
-                    shape.update_position(velocity.vx * dt, velocity.vy * dt)
+                shape.update_position(velocity.vx * dt, velocity.vy * dt)
 
 class GravitySystem(System):
     def __init__(self, gravity = -9.8):

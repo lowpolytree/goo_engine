@@ -32,8 +32,7 @@ class ShapeComponent(Component):
     def update_position(self, dx, dy):
         # Update the shape's position by a delta
         if self.shape:
-            self.shape.x += dx
-            self.shape.y += dy
+            self.shape.position = (self.shape.x + dx, self.shape.y + dy)
 
 class VelocityComponent(Component):
     def __init__(self, vx=0, vy=0, damping=1.0):
