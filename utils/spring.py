@@ -15,7 +15,6 @@ class Spring():
         self.line_entity = None
         self.start_entity = None
         self.end_entity = None
-
         self.create_spring_entities()
         
     def create_spring_entities(self):

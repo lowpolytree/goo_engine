@@ -28,9 +28,9 @@ class DragForceGenerator(ForceGenerator):
             entity.get_component(ForceComponent).add_force(drag_fx, drag_fy)
         
 class SpringForceGenerator(ForceGenerator):
-    def __init__(self, spring, anchor, spring_coefficient, rest_length):
+    def __init__(self, spring, anchor_pos, spring_coefficient, rest_length):
         self.spring = spring
-        self.anchor = anchor
+        self.anchor = anchor_pos
         self.k = spring_coefficient 
         self.rest_length = rest_length
         

@@ -1,6 +1,6 @@
 import pyglet
-from scenes.game_window_4 import GameWindow4
+from scenes.game_window_3 import GameWindow3
 
-window = GameWindow4()
+window = GameWindow3()
 pyglet.clock.schedule_interval(window.update, 1/60.0)  # 60 fps
 pyglet.app.run()

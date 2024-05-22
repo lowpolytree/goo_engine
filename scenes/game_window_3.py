@@ -5,80 +5,48 @@ from entity import Entity
 from scenes.scene_base import Scene
 from components.components import *
 from systems.systems import *
+from utils.particle import ParticleSystem
 
-#spawns fireworks
+#spawns fireworks with ParticleSystem
 
 class GameWindow3(pyglet.window.Window):
     def __init__(self):
         super().__init__(1280, 720)
 
         self.fps_display = pyglet.window.FPSDisplay(self)
+        self.physics_system = PhysicsSystem()
+        self.batch = pyglet.graphics.Batch() 
+        self.scene = Scene()  
+        self.particle_system = None
 
-        self.batch = pyglet.graphics.Batch()  # Create a batch for drawing
-        self.scene = Scene()  # Initialize the scene
         self.setup_scene()
 
     def setup_scene(self):
-        physics_system = PhysicsSystem()
         gravity_generator = GravityForceGenerator(-85.0)
         drag_generator = DragForceGenerator(0.1)
-        physics_system.add_force_generator(gravity_generator)
-        physics_system.add_force_generator(drag_generator)
+        self.physics_system.add_force_generator(gravity_generator)
+        self.physics_system.add_force_generator(drag_generator)
 
-        self.scene.add_system(physics_system)
-        self.scene.add_system(AgeSystem())
+        self.scene.add_system(self.physics_system)
+
+        self.particle_system = ParticleSystem(self.batch, self.scene)
+        self.particle_system.create_firework((300, 200), 100)
 
     def on_draw(self):
-
-        #change color of particles based on their age
-        for entity in self.scene.entities:
-            self.change_particle_color(entity)
+        if self.particle_system:
+            self.particle_system.draw()
 
         self.clear()
         self.fps_display.draw()
-        self.batch.draw()  # Draw everything in the batch
+        self.batch.draw() 
 
     def update(self, dt):
         self.scene.update(dt)
+        if self.particle_system:
+            self.particle_system.update(dt)
 
     def on_mouse_press(self, x, y, button, modifiers):
         if button == pyglet.window.mouse.LEFT:
-            self.create_fireworks(x, y, 100, self.batch)
+            pass
 
-    def create_fireworks(self, x, y, number_of_particles, batch):
-        for i in range(number_of_particles):
-            # Stagger the creation by adding a small delay for each particle
-            delay = i * 0.005  # Delay each particle by 0.01 seconds
-            pyglet.clock.schedule_once(self.create_particle, delay, x, y, batch)
-
-    def create_particle(self, dt, x, y, batch):
-        random_speed = random.uniform(250.0, 280.0)
-        random_radius = random.uniform(2, 2.5)
-        epsilon = 0.2
-        random_angle = random.uniform(pi/2 - epsilon, pi/2 + epsilon)
-        random_age = random.uniform(3.0, 5.0)
-        
-        p = Entity()
-        p.add_component(ShapeComponent.circle(x, y, random_radius, 1.0, batch))
-        p.add_component(ForceComponent())
-        p.add_component(MassComponent()) # mass = 1.0 by default
-        p.add_component(VelocityComponent(random_speed * cos(random_angle), random_speed * sin(random_angle)))
-        p.add_component(AgeComponent(random_age))
-        self.scene.add_entity(p)
-    
-    def change_particle_color(self, p):
-        sc = p.get_component(ShapeComponent)
-        ac = p.get_component(AgeComponent)
-
-        t = ac.remaining_time / ac.age
-        start_color = (255, 0, 0)  # Bright yellow
-        end_color = (255, 255, 0)  # Black or transparent
-
-        new_color = (
-            int(start_color[0] * (1 - t) + end_color[0] * t),
-            int(start_color[1] * (1 - t) + end_color[1] * t),
-            int(start_color[2] * (1 - t) + end_color[2] * t)
-        )
-
-        sc.shape.color = new_color
 
