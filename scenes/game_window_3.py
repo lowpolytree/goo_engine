@@ -30,12 +30,10 @@ class GameWindow3(pyglet.window.Window):
         self.scene.add_system(self.physics_system)
 
         self.particle_system = ParticleSystem(self.batch, self.scene)
-        self.particle_system.create_firework((300, 200), 100)
-
+        
     def on_draw(self):
         if self.particle_system:
             self.particle_system.draw()
-
         self.clear()
         self.fps_display.draw()
         self.batch.draw() 
@@ -47,6 +45,6 @@ class GameWindow3(pyglet.window.Window):
 
     def on_mouse_press(self, x, y, button, modifiers):
         if button == pyglet.window.mouse.LEFT:
-            pass
+            self.particle_system.create_firework((x, y), 100)
 
 

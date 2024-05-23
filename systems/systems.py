@@ -1,5 +1,5 @@
 from components.components import ShapeComponent, VelocityComponent, AccelerationComponent, AgeComponent, MassComponent, ForceComponent
-from systems.force_generator import GravityForceGenerator, DragForceGenerator, SpringForceGenerator
+from systems.force_generator import *
 
 class System:
     def update(self, entities, dt):
@@ -16,7 +16,6 @@ class PhysicsSystem(System):
         if not entities:  # Early exit if no entities to process
             return
         for entity in entities:
-
             for generator in self.force_generators:
                 generator.apply_force(entity)
 
@@ -46,17 +45,17 @@ class PhysicsSystem(System):
 
                 shape.update_position(velocity.vx * dt, velocity.vy * dt)
 
-class GravitySystem(System):
-    def __init__(self, gravity = -9.8):
-        self.gravity = gravity
+# class GravitySystem(System):
+#     def __init__(self, gravity = -9.8):
+#         self.gravity = gravity
 
-    def update(self, entities, dt):
-        if not entities:  # Early exit if no entities to process
-            return
-        for entity in entities:
-            accel = entity.get_component(AccelerationComponent)
-            if accel:
-                accel.apply_force(0, self.gravity)
+#     def update(self, entities, dt):
+#         if not entities:  # Early exit if no entities to process
+#             return
+#         for entity in entities:
+#             accel = entity.get_component(AccelerationComponent)
+#             if accel:
+#                 accel.apply_force(0, self.gravity)
 
 
 class AgeSystem(System):

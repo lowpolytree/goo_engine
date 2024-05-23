@@ -1,5 +1,6 @@
 import random
 import pyglet.clock
+import utils.tags
 from typing import List
 from math import cos, sin, pi
 from components.components import ShapeComponent, VelocityComponent, MassComponent, ForceComponent, AgeComponent
