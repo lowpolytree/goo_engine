@@ -3,7 +3,7 @@ from entity import Entity
 from scenes.scene_base import Scene
 from components.components import *
 from systems.systems import *
-from utils.spring import Spring
+from utils.spring import AnchoredSpring, DoubleSpring
 
 # showcasing anchor springs
 
@@ -21,16 +21,16 @@ class GameWindow4(pyglet.window.Window):
         
     def setup_scene(self):
 
-        s1 = Spring((600, 600), (600, 200), 7.0, 250, self.batch)
+        s1 = DoubleSpring((600, 500), (600, 300), 5.0, 200, self.batch)
         s1.add_to_scene(self.scene, self.physics_system)
 
-        s2 = Spring((300, 600), (300, 300), 5.0, 350, self.batch)
-        s2.add_to_scene(self.scene, self.physics_system)
+        # s2 = AnchoredSpring((300, 600), (300, 300), 5.0, 350, self.batch)
+        # s2.add_to_scene(self.scene, self.physics_system)
 
-        s3 = Spring((900, 600), (900, 250), 5.0, 200, self.batch)
-        s3.add_to_scene(self.scene, self.physics_system)
+        # s3 = AnchoredSpring((900, 600), (900, 250), 5.0, 200, self.batch)
+        # s3.add_to_scene(self.scene, self.physics_system)
 
-        self.springs = (s1, s2, s3)
+        self.springs = (s1,)
         self.scene.add_system(self.physics_system)
 
     def on_draw(self):
