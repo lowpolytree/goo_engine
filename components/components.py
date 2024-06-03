@@ -45,31 +45,6 @@ class MassComponent(Component):
         self.mass = mass
         self.inverse_mass = 1.0/self.mass if mass != 0 else float('inf')
 
-class AccelerationComponent(Component):
-    
-    def __init__(self, ax=0, ay=0):
-        self.ax = ax  # Acceleration in the x direction
-        self.ay = ay  # Acceleration in the y direction
-        self.force_x = 0  # Total force currently applied in the x direction
-        self.force_y = 0  # Total force currently applied in the y direction
-        self.inverse_mass = 1.0  # Default inverse mass; update as necessary
-
-    def apply_force(self, fx, fy):
-        """ Apply an external force to the component. """
-        self.force_x += fx
-        self.force_y += fy
-
-    def update_acceleration(self):
-        """ Update acceleration based on the current total force and inverse mass. """
-        self.ax = self.force_x * self.inverse_mass
-        self.ay = self.force_y * self.inverse_mass
-        #print(f"ax: {self.ax}, ay: {self.ay}")
-
-    def clear_forces(self):
-        """ Clear all forces after updating acceleration to prepare for the next frame. """
-        self.force_x = 0
-        self.force_y = 0
-
 class AgeComponent(Component):
     def __init__(self, age):
         self.age = age

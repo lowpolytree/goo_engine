@@ -81,7 +81,7 @@ class DoubleSpringForceGenerator(ForceGenerator):
             force_x = -self.k * change_in_length * n_displacement.x
             force_y = -self.k * change_in_length * n_displacement.y
 
-            print(f"Displacement: {displacement}, Distance: {distance}, Change in length: {change_in_length}, Force: {(force_x, force_y)}")
+            # print(f"Displacement: {displacement}, Distance: {distance}, Change in length: {change_in_length}, Force: {(force_x, force_y)}")
 
             start_force_comp.add_force(force_x, force_y)
             end_force_comp.add_force(-force_x, -force_y)

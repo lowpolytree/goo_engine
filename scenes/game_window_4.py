@@ -21,7 +21,7 @@ class GameWindow4(pyglet.window.Window):
         
     def setup_scene(self):
 
-        s1 = DoubleSpring((600, 500), (600, 300), 5.0, 200, self.batch)
+        s1 = DoubleSpring((600, 500), (600, 300), 5.0, 150, self.batch)
         s1.add_to_scene(self.scene, self.physics_system)
 
         # s2 = AnchoredSpring((300, 600), (300, 300), 5.0, 350, self.batch)
