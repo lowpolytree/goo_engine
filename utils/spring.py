@@ -9,9 +9,10 @@ from scenes.scene_base import Scene
 # TwoEnded Spring: derived
 
 class Spring():
-    def __init__(self, spring_coefficient, rest_length, batch):
+    def __init__(self, spring_coefficient, rest_length, damping, batch):
         self.k = spring_coefficient
         self.rest_length = rest_length
+        self.damping = damping
         self.batch = batch
         self.start_entity = None
         self.end_entity = None
@@ -30,8 +31,8 @@ class Spring():
         raise NotImplementedError("This method should be overridden by subclasses")
 
 class AnchoredSpring(Spring):
-    def __init__(self, anchor_point, movable_point, spring_coefficient, rest_length, batch):
-        super().__init__(spring_coefficient, rest_length, batch)
+    def __init__(self, anchor_point, movable_point, spring_coefficient, rest_length, damping, batch):
+        super().__init__(spring_coefficient, rest_length, damping, batch)
         self.anchor_point = anchor_point
         self.movable_point = movable_point
         self.create_spring_entities()
@@ -42,10 +43,10 @@ class AnchoredSpring(Spring):
         self.line_entity.add_component(ShapeComponent.line(*self.anchor_point, *self.movable_point, 1.0, self.batch))
 
         self.end_entity = Entity()
-        self.end_entity.add_component(ShapeComponent.circle(*self.movable_point, 5.0, self.batch))
+        self.end_entity.add_component(ShapeComponent.circle(*self.movable_point, 10.0, self.batch))
         self.end_entity.add_component(ForceComponent())
-        self.end_entity.add_component(MassComponent())
-        self.end_entity.add_component(VelocityComponent(0.0, 0.0, 0.98))
+        self.end_entity.add_component(MassComponent(1.0))
+        self.end_entity.add_component(VelocityComponent(0.0, 0.0, self.damping))
 
         self.force_generator = AchoredSpringForceGenerator(self.end_entity, self.anchor_point, self.k, self.rest_length)
 
@@ -64,8 +65,8 @@ class AnchoredSpring(Spring):
         self.update_connection()
 
 class DoubleSpring(Spring):
-    def __init__(self, start_point, end_point, spring_coefficient, rest_length, batch):
-        super().__init__(spring_coefficient, rest_length, batch)
+    def __init__(self, start_point, end_point, spring_coefficient, rest_length, damping, batch):
+        super().__init__(spring_coefficient, rest_length, damping, batch)
         self.start_point = start_point
         self.end_point = end_point
         self.create_spring_entities()
@@ -80,14 +81,14 @@ class DoubleSpring(Spring):
         self.start_entity.add_component(ShapeComponent.circle(*self.start_point, 5.0, self.batch))
         self.start_entity.add_component(ForceComponent())
         self.start_entity.add_component(MassComponent())
-        self.start_entity.add_component(VelocityComponent(0.0, 0.0, 0.98))
+        self.start_entity.add_component(VelocityComponent(0.0, 0.0, self.damping))
 
         # Entity for the end of the line
         self.end_entity = Entity() 
         self.end_entity.add_component(ShapeComponent.circle(*self.end_point, 5.0, self.batch))
         self.end_entity.add_component(ForceComponent())
         self.end_entity.add_component(MassComponent())
-        self.end_entity.add_component(VelocityComponent(0.0, 0.0, 0.98))
+        self.end_entity.add_component(VelocityComponent(0.0, 0.0, self.damping))
 
         self.force_generator = DoubleSpringForceGenerator(self.start_entity, self.end_entity, self.k, self.rest_length)
 
